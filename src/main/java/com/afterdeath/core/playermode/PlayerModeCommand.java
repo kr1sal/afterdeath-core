@@ -42,23 +42,23 @@ public final class PlayerModeCommand {
                                             .orElse(null);
 
                                     if (mode == null) {
-                                        ctx.getSource().sendFailure(
-                                                Component.translatable("command.AfterdeathCore.playermode.unknown", raw));
+//                                        ctx.getSource().sendFailure(
+//                                                Component.translatable("command.AfterdeathCore.playermode.unknown", raw));
                                         return 0;
                                     }
-
-                                    boolean changed = PlayerModeTransform.apply(player, mode);
-                                    Component name = Component.translatable(
-                                            "playermode.AfterdeathCore." + mode.getSerializedName());
-                                    if (changed) {
-                                        ctx.getSource().sendSuccess(
-                                                () -> Component.translatable("command.AfterdeathCore.playermode.changed", name),
-                                                true);
-                                    } else {
-                                        ctx.getSource().sendSuccess(
-                                                () -> Component.translatable("command.AfterdeathCore.playermode.same", name),
-                                                false);
-                                    }
+//
+//                                    boolean changed = PlayerModeTransform.apply(player, mode);
+//                                    Component name = Component.translatable(
+//                                            "playermode.AfterdeathCore." + mode.getSerializedName());
+//                                    if (changed) {
+//                                        ctx.getSource().sendSuccess(
+//                                                () -> Component.translatable("command.AfterdeathCore.playermode.changed", name),
+//                                                true);
+//                                    } else {
+//                                        ctx.getSource().sendSuccess(
+//                                                () -> Component.translatable("command.AfterdeathCore.playermode.same", name),
+//                                                false);
+//                                    }
                                     return 1;
                                 })
                         )

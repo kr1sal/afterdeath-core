@@ -117,7 +117,7 @@ public class PhylacteryItem extends Item {
         int c = getCharge(stack);
         int max = maxCharge();
         ChatFormatting color = c >= max ? ChatFormatting.GOLD : ChatFormatting.LIGHT_PURPLE;
-        tooltip.add(Component.translatable("item.AfterdeathCore.phylactery.tooltip", c, max).withStyle(color));
-        tooltip.add(Component.translatable("item.AfterdeathCore.phylactery.desc").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(Component.translatable("item.afterdeath_core.phylactery.tooltip", c, max).withStyle(color));
+        tooltip.add(Component.translatable("item.afterdeath_core.phylactery.desc").withStyle(ChatFormatting.DARK_GRAY));
     }
 }

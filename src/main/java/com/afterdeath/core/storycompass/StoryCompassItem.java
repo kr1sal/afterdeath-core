@@ -81,6 +81,15 @@ public class StoryCompassItem extends CompassItem {
         return t != null && t.target().isPresent();
     }
 
+    // Vanilla CompassItem.getDescriptionId(stack) swaps to
+    // "item.minecraft.lodestone_compass" as soon as a LodestoneTracker is
+    // attached. Override it so the per-target name (e.g. "Story Compass:
+    // First Boss") stays after the structure is found.
+    @Override
+    public String getDescriptionId(ItemStack stack) {
+        return this.getDescriptionId();
+    }
+
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> tooltip, TooltipFlag flag) {
         Component targetName = Component.translatable(this.translatableKey);

@@ -8,7 +8,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
-@EventBusSubscriber(modid = AfterdeathCore.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = AfterdeathCore.MODID, value = Dist.CLIENT)
 public final class PhylacteryClient {
 
     public static final ResourceLocation CHARGE_LEVEL =

@@ -126,7 +126,7 @@ public final class Config {
         STORY_COMPASS_RADIUS_CHUNKS = B
                 .comment("Search radius in chunks")
                 .translation("configuration.AfterdeathCore.story_compass.radius_chunks")
-                .defineInRange("radius_chunks", 100, 1, 10000);
+                .defineInRange("radius_chunks", 1000, 1, 10000);
 
         STORY_COMPASS_INTERVAL_TICKS = B
                 .comment("Ticks between re-scans while the compass sits in inventory")
