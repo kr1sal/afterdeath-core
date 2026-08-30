@@ -80,14 +80,14 @@ public final class PlayerModeTransform {
                     .execute(command, server.createCommandSourceStack());
         } catch (com.mojang.brigadier.exceptions.CommandSyntaxException e) {
             LOGGER.warn("[playermode] `{}` failed to parse/execute: {}", command, e.getMessage());
-            player.sendSystemMessage(Component.literal("[playermode] parse fail: " + e.getMessage())
-                    .withStyle(ChatFormatting.RED));
-            return;
+//            player.sendSystemMessage(Component.literal("[playermode] parse fail: " + e.getMessage())
+//                    .withStyle(ChatFormatting.RED));
+//            return;
         }
-        if (result == 0) {
-            player.sendSystemMessage(Component.literal("[playermode] returned 0: " + command)
-                    .withStyle(ChatFormatting.RED));
-        }
+//        if (result == 0) {
+//            player.sendSystemMessage(Component.literal("[playermode] returned 0: " + command)
+//                    .withStyle(ChatFormatting.RED));
+//        }
     }
 
     private static void playMorphEffect(ServerPlayer player, PlayerMode mode) {
