@@ -2,13 +2,26 @@ package com.afterdeath.core.phylactery;
 
 import com.afterdeath.core.Config;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.portal.PortalShape;
 
 import java.util.List;
+import java.util.Optional;
 
 public class PhylacteryItem extends Item {
 
@@ -26,6 +39,10 @@ public class PhylacteryItem extends Item {
 
     public static int chargePerUse() {
         return Config.PHYLACTERY_CHARGE_PER_USE.get();
+    }
+
+    public static int portalChargeCost() {
+        return Config.PHYLACTERY_PORTAL_CHARGE_COST.get();
     }
 
     public static int getCharge(ItemStack stack) {
@@ -50,6 +67,49 @@ public class PhylacteryItem extends Item {
     @Override
     public boolean isFoil(ItemStack stack) {
         return isCharged(stack);
+    }
+
+    // Right-click obsidian to ignite a Nether portal, at the cost of stored charge.
+    // Vanilla ignition sources (flint & steel, fire charges, lightning-lit fire) are blocked
+    // via PortalSpawnEvent in PhylacteryEvents, so this is the only way to light a portal.
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        Level level = context.getLevel();
+        BlockPos clickedPos = context.getClickedPos();
+        BlockState clickedState = level.getBlockState(clickedPos);
+        if (!clickedState.is(Blocks.OBSIDIAN)) {
+            return InteractionResult.PASS;
+        }
+
+        BlockPos framePos = clickedPos.relative(context.getClickedFace());
+        if (!level.getBlockState(framePos).isAir()) {
+            return InteractionResult.PASS;
+        }
+
+        ItemStack stack = context.getItemInHand();
+        int cost = portalChargeCost();
+        if (getCharge(stack) < cost) {
+            return InteractionResult.FAIL;
+        }
+
+        Optional<PortalShape> shape = PortalShape.findEmptyPortalShape(level, framePos, Direction.Axis.X);
+        if (shape.isEmpty()) {
+            shape = PortalShape.findEmptyPortalShape(level, framePos, Direction.Axis.Z);
+        }
+        if (shape.isEmpty() || !shape.get().isValid()) {
+            return InteractionResult.PASS;
+        }
+
+        if (!level.isClientSide) {
+            shape.get().createPortalBlocks();
+            setCharge(stack, getCharge(stack) - cost);
+            Player player = context.getPlayer();
+            level.playSound(null, framePos,
+                    SoundEvents.PORTAL_TRIGGER, SoundSource.BLOCKS,
+                    1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
+            level.gameEvent(player, GameEvent.BLOCK_PLACE, framePos);
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override

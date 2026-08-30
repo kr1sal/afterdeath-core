@@ -60,6 +60,7 @@ public final class PlayerModeEvents {
         if (mode.isHostileTarget()) return;
 
         if (!(event.getTarget() instanceof Mob attacked) || !(attacked instanceof Enemy)) return;
+        if (isMinionOf(attacked, player)) return;
 
         broadcastAnger(attacked, player);
     }
@@ -74,6 +75,7 @@ public final class PlayerModeEvents {
 
         PlayerMode mode = player.getData(PlayerModeAttachments.PLAYER_MODE);
         if (mode.isHostileTarget()) return;
+        if (isMinionOf(attacked, player)) return;
 
         broadcastAnger(attacked, player);
     }
@@ -87,15 +89,20 @@ public final class PlayerModeEvents {
         AABB area = attacked.getBoundingBox().inflate(radius);
         for (Entity nearby : attacked.level().getEntities(attacked, area,
                 m -> m != attacked && m instanceof Enemy)) {
-            if (nearby instanceof Mob mob) {
+            if (nearby instanceof Mob mob && !isMinionOf(mob, player)) {
                 angerMob(mob, player);
             }
         }
     }
 
+    private static boolean isMinionOf(Entity mob, Player player) {
+        return mob.isAlliedTo(player) || player.isAlliedTo(mob);
+    }
+
     @SubscribeEvent
     public static void onChangeTarget(LivingChangeTargetEvent event) {
         if (!(event.getEntity() instanceof Enemy)) return;
+        if (event.getEntity().getTeam() != null) return;
 
         if (shouldIgnorePlayer(event.getEntity(), event.getNewAboutToBeSetTarget())) {
             event.setCanceled(true);
@@ -106,10 +113,40 @@ public final class PlayerModeEvents {
     public static void onMobTick(EntityTickEvent.Post event) {
         if (event.getEntity().level().isClientSide) return;
         if (!(event.getEntity() instanceof Mob mob) || !(mob instanceof Enemy)) return;
+        if (mob.getTeam() != null) {
+            scanMinionTarget(mob);
+            return;
+        }
 
         LivingEntity target = mob.getTarget();
         if (shouldIgnorePlayer(mob, target)) {
             mob.setTarget(null);
+        }
+    }
+
+    private static void scanMinionTarget(Mob mob) {
+        if (mob.tickCount % 20 != 0) return;
+
+        LivingEntity current = mob.getTarget();
+        if (current != null && current.isAlive() && !mob.isAlliedTo(current)) return;
+
+        double range = 24.0D;
+        AABB area = mob.getBoundingBox().inflate(range);
+        LivingEntity best = null;
+        double bestDist = Double.MAX_VALUE;
+        for (Entity nearby : mob.level().getEntities(mob, area, e ->
+                e instanceof LivingEntity le
+                        && le.isAlive()
+                        && (le instanceof Enemy || le instanceof Player)
+                        && !mob.isAlliedTo(le))) {
+            double d = mob.distanceToSqr(nearby);
+            if (d < bestDist) {
+                bestDist = d;
+                best = (LivingEntity) nearby;
+            }
+        }
+        if (best != null) {
+            mob.setTarget(best);
         }
     }
 

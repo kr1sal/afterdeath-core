@@ -9,6 +9,7 @@ public final class Config {
     public static final ModConfigSpec.IntValue PHYLACTERY_MAX_CHARGE;
     public static final ModConfigSpec.IntValue PHYLACTERY_TICKS_PER_UNIT;
     public static final ModConfigSpec.IntValue PHYLACTERY_CHARGE_PER_USE;
+    public static final ModConfigSpec.IntValue PHYLACTERY_PORTAL_CHARGE_COST;
     public static final ModConfigSpec.DoubleValue PHYLACTERY_HEAL_AMOUNT;
     public static final ModConfigSpec.IntValue PHYLACTERY_REGEN_TICKS;
     public static final ModConfigSpec.IntValue PHYLACTERY_ABSORPTION_TICKS;
@@ -44,6 +45,11 @@ public final class Config {
                 .comment("Charge consumed each time the phylactery saves you from lethal damage")
                 .translation("configuration.AfterdeathCore.phylactery.charge_per_use")
                 .defineInRange("charge_per_use", 50, 1, 100000);
+
+        PHYLACTERY_PORTAL_CHARGE_COST = B
+                .comment("Charge consumed when the phylactery is used to ignite a Nether portal frame")
+                .translation("configuration.AfterdeathCore.phylactery.portal_charge_cost")
+                .defineInRange("portal_charge_cost", 50, 1, 100000);
 
         PHYLACTERY_HEAL_AMOUNT = B
                 .comment("Health restored when the phylactery triggers")

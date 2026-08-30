@@ -21,9 +21,10 @@ import java.util.List;
 public final class AbilityCommand {
 
     private static final List<String> ABILITIES = List.of(
-            "summon_vindicator",
+            "summon_vex",
             "summon_skeleton",
-            "damage_burst"
+            "damage_burst",
+            "dash"
     );
 
     private static final SuggestionProvider<CommandSourceStack> ABILITY_SUGGESTIONS =
@@ -41,22 +42,24 @@ public final class AbilityCommand {
                                         .executes(ctx -> {
                                             ServerPlayer player = ctx.getSource().getPlayerOrException();
                                             String name = StringArgumentType.getString(ctx, "name");
-                                            boolean ok = switch (name) {
-                                                case "summon_vindicator" ->
-                                                        AfterdeathAbilities.trySummonVindicator(player);
+                                            AbilityResult result = switch (name) {
+                                                case "summon_vex" ->
+                                                        AfterdeathAbilities.trySummonVex(player);
                                                 case "summon_skeleton" ->
                                                         AfterdeathAbilities.trySummonSkeleton(player);
                                                 case "damage_burst" ->
                                                         AfterdeathAbilities.tryDamageBurst(player);
-                                                default -> false;
+                                                case "dash" ->
+                                                        AfterdeathAbilities.tryDash(player);
+                                                default -> null;
                                             };
-                                            if (!ok) {
+                                            if (result == null) {
                                                 ctx.getSource().sendFailure(Component.literal(
-                                                        "Ability unavailable: " + name
-                                                                + " (missing skill, wrong form, or on cooldown)"));
+                                                        "Unknown ability: " + name));
                                                 return 0;
                                             }
-                                            return 1;
+                                            result.sendTo(player);
+                                            return result.ok() ? 1 : 0;
                                         })
                                 )
                         )

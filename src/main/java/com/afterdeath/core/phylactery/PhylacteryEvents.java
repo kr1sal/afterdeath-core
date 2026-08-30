@@ -15,6 +15,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 @EventBusSubscriber(modid = AfterdeathCore.MODID)
@@ -65,6 +66,16 @@ public final class PhylacteryEvents {
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
 
+        event.setCanceled(true);
+    }
+
+    // Ignition of a Nether portal is reserved for the phylactery. Every vanilla path
+    // (flint & steel, fire charges, dispensers, lightning-set fires, dragon breath, mod
+    // items that place fire) funnels through BaseFireBlock.onPlace -> PortalSpawnEvent.
+    // The phylactery instead calls PortalShape.createPortalBlocks directly and does not
+    // trigger this event, so a blanket cancel here leaves it as the sole ignition source.
+    @SubscribeEvent
+    public static void onPortalSpawn(BlockEvent.PortalSpawnEvent event) {
         event.setCanceled(true);
     }
 

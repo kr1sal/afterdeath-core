@@ -17,18 +17,18 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 @EventBusSubscriber(modid = AfterdeathCore.MODID)
 public final class SpiritFlightEvents {
 
-    private static final ResourceLocation FLIGHT_MODIFIER_ID =
+    public static final ResourceLocation FLIGHT_MODIFIER_ID =
             ResourceLocation.fromNamespaceAndPath(AfterdeathCore.MODID, "spirit_flight");
 
     // Tags granted by afterdeath_skills soul-tree skills.
-    private static final String TAG_SOUL_FLIGHT = "afterdeath.soul_flight";
-    private static final String TAG_FLIGHT_STAMINA_PLUS = "afterdeath.flight_stamina_plus";
+    public static final String TAG_SOUL_FLIGHT = "afterdeath.soul_flight";
+    public static final String TAG_FLIGHT_STAMINA_PLUS = "afterdeath.flight_stamina_plus";
 
     // Extra flight ticks granted when the stamina skill is purchased.
-    private static final int FLIGHT_STAMINA_BONUS_TICKS = 100;
+    public static final int FLIGHT_STAMINA_BONUS_TICKS = 100;
 
-    private static final float VANILLA_FLY_SPEED = 0.05F;
-    private static final float EPS = 1.0E-6F;
+    public static final float VANILLA_FLY_SPEED = 0.05F;
+    public static final float EPS = 1.0E-6F;
 
     private SpiritFlightEvents() {}
 
@@ -41,8 +41,13 @@ public final class SpiritFlightEvents {
         Abilities abilities = player.getAbilities();
         if (abilities.instabuild || player.isSpectator()) return;
 
+        boolean hasFlightTag = serverPlayer.getTags().contains(TAG_SOUL_FLIGHT);
+        if (serverPlayer.getData(PlayerModeAttachments.SOUL_FLIGHT_UNLOCKED) != hasFlightTag) {
+            serverPlayer.setData(PlayerModeAttachments.SOUL_FLIGHT_UNLOCKED, hasFlightTag);
+        }
+
         PlayerMode mode = player.getData(PlayerModeAttachments.PLAYER_MODE);
-        if (mode == PlayerMode.SOUL && serverPlayer.getTags().contains(TAG_SOUL_FLIGHT)) {
+        if (mode == PlayerMode.SOUL && hasFlightTag) {
             tickSoul(serverPlayer, abilities);
         } else {
             tickMortal(serverPlayer, abilities);

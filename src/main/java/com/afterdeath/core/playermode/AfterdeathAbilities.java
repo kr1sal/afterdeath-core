@@ -11,13 +11,13 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Skeleton;
-import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
@@ -33,7 +33,7 @@ import java.util.UUID;
 public final class AfterdeathAbilities {
 
     public static final String TAG_DASH = "afterdeath.dash";
-    public static final String TAG_SUMMON_VINDICATOR = "afterdeath.soul_summon_vindicator";
+    public static final String TAG_SUMMON_VEX = "afterdeath.soul_summon_vex";
     public static final String TAG_SUMMON_SKELETON = "afterdeath.skeleton_summon_swordsman";
     public static final String TAG_DAMAGE_BURST = "afterdeath.damage_burst";
 
@@ -45,7 +45,7 @@ public final class AfterdeathAbilities {
             ResourceLocation.fromNamespaceAndPath(AfterdeathCore.MODID, "damage_burst");
 
     private static final int DASH_COOLDOWN_TICKS = 100;      // 5s
-    private static final double DASH_HORIZONTAL_IMPULSE = 1.2;
+    private static final double DASH_HORIZONTAL_IMPULSE = 1.0;
     private static final double DASH_VERTICAL_LIFT = 0.15;
 
     private static final int SUMMON_COOLDOWN_TICKS = 1200;   // 60s
@@ -65,26 +65,30 @@ public final class AfterdeathAbilities {
 
     /* -------------------- Cooldown helpers -------------------- */
 
-    private static boolean checkAndSetCooldown(ServerPlayer player, String key, int cooldownTicks) {
+    // Ticks remaining until `key` is ready for this player. 0 = ready now.
+    private static int cooldownRemaining(ServerPlayer player, String key) {
         long now = player.serverLevel().getGameTime();
-        String mapKey = key + "|" + player.getUUID();
-        Long readyAt = COOLDOWNS.get(mapKey);
-        if (readyAt != null && readyAt > now) {
-            return false;
-        }
-        COOLDOWNS.put(mapKey, now + cooldownTicks);
-        return true;
+        Long readyAt = COOLDOWNS.get(key + "|" + player.getUUID());
+        if (readyAt == null) return 0;
+        long diff = readyAt - now;
+        return diff > 0 ? (int) diff : 0;
+    }
+
+    private static void setCooldown(ServerPlayer player, String key, int cooldownTicks) {
+        long now = player.serverLevel().getGameTime();
+        COOLDOWNS.put(key + "|" + player.getUUID(), now + cooldownTicks);
     }
 
     /* -------------------- Dash (Soul + Skeleton) -------------------- */
 
-    // Fires from a sprint-jump. Returns true when a dash actually triggered.
-    public static boolean tryDash(ServerPlayer player) {
-        if (!player.getTags().contains(TAG_DASH)) return false;
-        if (!player.isSprinting()) return false;
+    // Fires from a sprint-jump.
+    public static AbilityResult tryDash(ServerPlayer player) {
+        if (!player.getTags().contains(TAG_DASH)) return AbilityResult.NO_ABILITY;
         PlayerMode mode = player.getData(PlayerModeAttachments.PLAYER_MODE);
-        if (mode == PlayerMode.HUMAN) return false; // dash lives in soul/skeleton phases
-        if (!checkAndSetCooldown(player, "dash", DASH_COOLDOWN_TICKS)) return false;
+        if (mode == PlayerMode.HUMAN) return AbilityResult.WRONG_MODE; // dash lives in soul/skeleton phases
+        if (!player.isSprinting()) return AbilityResult.NOT_SPRINTING;
+        int rem = cooldownRemaining(player, "dash");
+        if (rem > 0) return new AbilityResult.OnCooldown(rem);
 
         Vec3 look = player.getLookAngle();
         Vec3 flatLook = new Vec3(look.x, 0, look.z).normalize();
@@ -98,30 +102,32 @@ public final class AfterdeathAbilities {
         ServerLevel lvl = player.serverLevel();
         lvl.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.ENDER_DRAGON_FLAP, SoundSource.PLAYERS, 0.5F, 1.6F);
-        return true;
+        setCooldown(player, "dash", DASH_COOLDOWN_TICKS);
+        return AbilityResult.SUCCESS;
     }
 
     /* -------------------- Summons -------------------- */
 
-    public static boolean trySummonVindicator(ServerPlayer player) {
-        if (!player.getTags().contains(TAG_SUMMON_VINDICATOR)) return false;
-        if (player.getData(PlayerModeAttachments.PLAYER_MODE) != PlayerMode.SOUL) return false;
-        return doSummon(player, EntityType.VINDICATOR);
+    public static AbilityResult trySummonVex(ServerPlayer player) {
+        if (!player.getTags().contains(TAG_SUMMON_VEX)) return AbilityResult.NO_ABILITY;
+        if (player.getData(PlayerModeAttachments.PLAYER_MODE) != PlayerMode.SOUL) return AbilityResult.WRONG_MODE;
+        int rem = cooldownRemaining(player, "summon");
+        if (rem > 0) return new AbilityResult.OnCooldown(rem);
+        return doSummon(player, EntityType.VEX);
     }
 
-    public static boolean trySummonSkeleton(ServerPlayer player) {
-        if (!player.getTags().contains(TAG_SUMMON_SKELETON)) return false;
-        if (player.getData(PlayerModeAttachments.PLAYER_MODE) != PlayerMode.SKELETON) return false;
+    public static AbilityResult trySummonSkeleton(ServerPlayer player) {
+        if (!player.getTags().contains(TAG_SUMMON_SKELETON)) return AbilityResult.NO_ABILITY;
+        if (player.getData(PlayerModeAttachments.PLAYER_MODE) != PlayerMode.SKELETON) return AbilityResult.WRONG_MODE;
+        int rem = cooldownRemaining(player, "summon");
+        if (rem > 0) return new AbilityResult.OnCooldown(rem);
         return doSummon(player, EntityType.SKELETON);
     }
 
-    private static <T extends PathfinderMob> boolean doSummon(ServerPlayer player, EntityType<T> type) {
-        if (!checkAndSetCooldown(player, "summon", SUMMON_COOLDOWN_TICKS)) return false;
-
+    private static <T extends Mob> AbilityResult doSummon(ServerPlayer player, EntityType<T> type) {
         ServerLevel lvl = player.serverLevel();
         ensureAllyTeam(lvl.getServer());
         addPlayerToAllyTeam(lvl, player);
-        removePreviousSummon(lvl, player);
 
         Vec3 look = player.getLookAngle();
         double sx = player.getX() + look.x * 1.5;
@@ -130,26 +136,31 @@ public final class AfterdeathAbilities {
 
         T summon = type.create(lvl, entity -> {}, net.minecraft.core.BlockPos.containing(sx, sy, sz),
                 MobSpawnType.SPAWNER, false, false);
-        if (summon == null) return false;
+        if (summon == null) return AbilityResult.SPAWN_FAILED;
         summon.moveTo(sx, sy, sz, player.getYRot(), 0);
         if (summon instanceof Skeleton s) {
             s.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND,
                     new net.minecraft.world.item.ItemStack(Items.IRON_SWORD));
         }
-        if (summon instanceof Vindicator v) {
+        if (summon instanceof Vex v) {
             v.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND,
-                    new net.minecraft.world.item.ItemStack(Items.IRON_AXE));
+                    new net.minecraft.world.item.ItemStack(Items.IRON_SWORD));
         }
+        summon.setPersistenceRequired();
         summon.addTag(ENTITY_TAG_ALLY);
         summon.addTag("owner:" + player.getUUID());
         lvl.getScoreboard().addPlayerToTeam(summon.getScoreboardName(),
                 lvl.getScoreboard().getPlayerTeam(ALLY_TEAM));
-        lvl.addFreshEntity(summon);
+        if (!lvl.addFreshEntity(summon)) {
+            return AbilityResult.SPAWN_FAILED;
+        }
 
+        removePreviousSummon(lvl, player);
         ACTIVE_SUMMON.put(player.getUUID(), summon.getUUID());
         lvl.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.EVOKER_PREPARE_SUMMON, SoundSource.PLAYERS, 1.0F, 1.0F);
-        return true;
+        setCooldown(player, "summon", SUMMON_COOLDOWN_TICKS);
+        return AbilityResult.SUCCESS;
     }
 
     private static void ensureAllyTeam(MinecraftServer server) {
@@ -181,13 +192,14 @@ public final class AfterdeathAbilities {
 
     /* -------------------- Damage burst (Skeleton) -------------------- */
 
-    public static boolean tryDamageBurst(ServerPlayer player) {
-        if (!player.getTags().contains(TAG_DAMAGE_BURST)) return false;
-        if (player.getData(PlayerModeAttachments.PLAYER_MODE) != PlayerMode.SKELETON) return false;
-        if (!checkAndSetCooldown(player, "burst", BURST_COOLDOWN_TICKS)) return false;
+    public static AbilityResult tryDamageBurst(ServerPlayer player) {
+        if (!player.getTags().contains(TAG_DAMAGE_BURST)) return AbilityResult.NO_ABILITY;
+        if (player.getData(PlayerModeAttachments.PLAYER_MODE) != PlayerMode.SKELETON) return AbilityResult.WRONG_MODE;
+        int rem = cooldownRemaining(player, "burst");
+        if (rem > 0) return new AbilityResult.OnCooldown(rem);
 
         AttributeInstance attr = player.getAttribute(Attributes.ATTACK_DAMAGE);
-        if (attr == null) return false;
+        if (attr == null) return AbilityResult.SPAWN_FAILED;
 
         double bonus = player.getMaxHealth() * BURST_DAMAGE_PER_MAX_HP;
         attr.removeModifier(BURST_MODIFIER_ID);
@@ -201,7 +213,8 @@ public final class AfterdeathAbilities {
         ServerLevel lvl = player.serverLevel();
         lvl.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.SKELETON_HURT, SoundSource.PLAYERS, 1.5F, 0.6F);
-        return true;
+        setCooldown(player, "burst", BURST_COOLDOWN_TICKS);
+        return AbilityResult.SUCCESS;
     }
 
     // Called every server tick from AbilityTickEvents to expire the burst.

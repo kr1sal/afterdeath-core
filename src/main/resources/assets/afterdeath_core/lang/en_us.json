@@ -25,6 +25,7 @@
   "configuration.afterdeath_core.phylactery.max_charge": "Maximum charge",
   "configuration.afterdeath_core.phylactery.ticks_per_unit": "Ticks per +1 charge",
   "configuration.afterdeath_core.phylactery.charge_per_use": "Charge cost per rescue",
+  "configuration.afterdeath_core.phylactery.portal_charge_cost": "Portal ignition charge cost",
   "configuration.afterdeath_core.phylactery.heal_amount": "Health restored on rescue",
   "configuration.afterdeath_core.phylactery.regen_ticks": "Regeneration II duration (ticks)",
   "configuration.afterdeath_core.phylactery.absorption_ticks": "Absorption II duration (ticks)",
@@ -47,5 +48,17 @@
   "configuration.afterdeath_core.story_compass.target": "Target structure id",
   "configuration.afterdeath_core.story_compass.radius_chunks": "Search radius (chunks)",
   "configuration.afterdeath_core.story_compass.interval_ticks": "Rescan interval (ticks)",
-  "configuration.afterdeath_core.story_compass.refresh_distance": "Refresh distance (blocks)"
+  "configuration.afterdeath_core.story_compass.refresh_distance": "Refresh distance (blocks)",
+
+  "key.categories.afterdeath_core": "Afterdeath Core",
+  "key.afterdeath_core.summon_vex": "Summon Vex (Spirit)",
+  "key.afterdeath_core.summon_skeleton": "Summon Skeleton Ally (Skeleton)",
+  "key.afterdeath_core.damage_burst": "Damage Burst (Skeleton)",
+  "key.afterdeath_core.dash": "Dash (Spirit / Skeleton, requires sprint)",
+
+  "ability.afterdeath_core.no_ability": "You have not learned this ability yet.",
+  "ability.afterdeath_core.wrong_mode": "This ability is not available in your current form.",
+  "ability.afterdeath_core.cooldown": "Ability on cooldown: %s s remaining.",
+  "ability.afterdeath_core.not_sprinting": "You must be sprinting to use this ability.",
+  "ability.afterdeath_core.spawn_failed": "The summon could not appear here."
 }

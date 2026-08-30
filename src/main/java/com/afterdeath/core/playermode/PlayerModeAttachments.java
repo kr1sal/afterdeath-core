@@ -43,6 +43,17 @@ public final class PlayerModeAttachments {
                     .build()
     );
 
+    // Mirrors the server-side TAG_SOUL_FLIGHT tag so the client HUD can see it —
+    // entity tags aren't sent to clients over the wire.
+    public static final Supplier<AttachmentType<Boolean>> SOUL_FLIGHT_UNLOCKED = ATTACHMENT_TYPES.register(
+            "soul_flight_unlocked",
+            () -> AttachmentType.<Boolean>builder(() -> false)
+                    .serialize(Codec.BOOL)
+                    .sync(ByteBufCodecs.BOOL)
+                    .copyOnDeath()
+                    .build()
+    );
+
     public static void register(IEventBus modBus) {
         ATTACHMENT_TYPES.register(modBus);
     }

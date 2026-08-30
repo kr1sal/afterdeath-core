@@ -1,4 +1,4 @@
-{
+  {
   "item.afterdeath_core.phylactery": "Филактерия",
   "item.afterdeath_core.phylactery.tooltip": "Заряд: %s / %s",
   "item.afterdeath_core.phylactery.desc": "Привязана к душе. Не существует вне рук владельца.",
@@ -25,6 +25,7 @@
   "configuration.afterdeath_core.phylactery.max_charge": "Максимальный заряд",
   "configuration.afterdeath_core.phylactery.ticks_per_unit": "Тиков на +1 заряд",
   "configuration.afterdeath_core.phylactery.charge_per_use": "Стоимость одного спасения",
+  "configuration.afterdeath_core.phylactery.portal_charge_cost": "Стоимость зажигания портала",
   "configuration.afterdeath_core.phylactery.heal_amount": "Здоровье после спасения",
   "configuration.afterdeath_core.phylactery.regen_ticks": "Длительность Регенерации II (тики)",
   "configuration.afterdeath_core.phylactery.absorption_ticks": "Длительность Поглощения II (тики)",
@@ -47,5 +48,17 @@
   "configuration.afterdeath_core.story_compass.target": "ID целевой структуры",
   "configuration.afterdeath_core.story_compass.radius_chunks": "Радиус поиска (чанки)",
   "configuration.afterdeath_core.story_compass.interval_ticks": "Интервал пересканирования (тики)",
-  "configuration.afterdeath_core.story_compass.refresh_distance": "Дистанция обновления цели (блоки)"
+  "configuration.afterdeath_core.story_compass.refresh_distance": "Дистанция обновления цели (блоки)",
+
+  "key.categories.afterdeath_core": "Afterdeath Core",
+  "key.afterdeath_core.summon_vex": "Призвать вредину (Дух)",
+  "key.afterdeath_core.summon_skeleton": "Призвать скелета-союзника (Скелет)",
+  "key.afterdeath_core.damage_burst": "Всплеск урона (Скелет)",
+  "key.afterdeath_core.dash": "Рывок (Дух/Скелет, нужен спринт)",
+
+  "ability.afterdeath_core.no_ability": "Ты ещё не изучил эту способность.",
+  "ability.afterdeath_core.wrong_mode": "Эта способность недоступна в текущем облике.",
+  "ability.afterdeath_core.cooldown": "Способность на кулдауне: осталось %s сек.",
+  "ability.afterdeath_core.not_sprinting": "Нужно бежать, чтобы использовать эту способность.",
+  "ability.afterdeath_core.spawn_failed": "Существо не смогло появиться здесь."
 }

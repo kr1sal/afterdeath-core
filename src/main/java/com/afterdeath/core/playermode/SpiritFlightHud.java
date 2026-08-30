@@ -40,14 +40,15 @@ public final class SpiritFlightHud {
     @SubscribeEvent
     public static void hideFood(RenderGuiLayerEvent.Pre event) {
         if (!VanillaGuiLayers.FOOD_LEVEL.equals(event.getName())) return;
-        if (isSoul()) event.setCanceled(true);
+        if (shouldShowStamina()) event.setCanceled(true);
     }
 
-    private static boolean isSoul() {
+    private static boolean shouldShowStamina() {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         if (player == null) return false;
-        return player.getData(PlayerModeAttachments.PLAYER_MODE) == PlayerMode.SOUL;
+        return player.getData(PlayerModeAttachments.PLAYER_MODE) == PlayerMode.SOUL
+                && player.getData(PlayerModeAttachments.SOUL_FLIGHT_UNLOCKED);
     }
 
     private static void render(GuiGraphics graphics, DeltaTracker delta) {
@@ -55,7 +56,7 @@ public final class SpiritFlightHud {
         LocalPlayer player = mc.player;
         if (player == null || mc.options.hideGui) return;
         if (player.isSpectator() || player.getAbilities().instabuild) return;
-        if (player.getData(PlayerModeAttachments.PLAYER_MODE) != PlayerMode.SOUL) return;
+        if (!shouldShowStamina()) return;
 
         int current = player.getData(PlayerModeAttachments.SPIRIT_FLIGHT_TICKS);
         int max = Math.max(1, Config.SPIRIT_FLIGHT_MAX_TICKS.get());
