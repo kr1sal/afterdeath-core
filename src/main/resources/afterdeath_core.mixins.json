@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "com.afterdeath.core.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8.5",
+  "client": [
+    "ModelPartMixin",
+    "ItemRendererMixin",
+    "HumanoidModelMixin",
+    "HumanoidArmorLayerMixin",
+    "AbstractClientPlayerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

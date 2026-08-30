@@ -1,0 +1,51 @@
+{
+  "item.afterdeath_core.phylactery": "Phylactery",
+  "item.afterdeath_core.phylactery.tooltip": "Charge: %s / %s",
+  "item.afterdeath_core.phylactery.desc": "Bound to your soul. Cannot exist outside your grasp.",
+  "hud.afterdeath_core.phylactery.charge": "Phylactery: %s%%",
+  "item.afterdeath_core.story_compass": "Story Compass",
+  "item.afterdeath_core.story_compass.target": "Points to: %s",
+  "item.afterdeath_core.story_compass.found": "Locked on: %s, %s, %s",
+  "item.afterdeath_core.story_compass.searching": "Searching...",
+
+  "item.afterdeath_core.story_compass_first_boss": "Story Compass: First Boss",
+  "item.afterdeath_core.story_compass_second_boss": "Story Compass: Second Boss",
+  "item.afterdeath_core.story_compass_third_boss": "Story Compass: Third Boss",
+  "item.afterdeath_core.story_compass_player_base": "Story Compass: Player Base",
+  "item.afterdeath_core.story_compass_final_boss": "Story Compass: Final Boss",
+
+  "structure.afterdeath_core.first_boss": "First Boss Arena",
+  "structure.afterdeath_core.second_boss": "Second Boss Arena",
+  "structure.afterdeath_core.third_boss": "Third Boss Arena",
+  "structure.afterdeath_core.player_base": "Player Base",
+  "structure.afterdeath_core.final_boss": "Final Boss Arena",
+  "itemGroup.afterdeath_core": "Afterdeath Core",
+
+  "configuration.afterdeath_core.phylactery": "Phylactery",
+  "configuration.afterdeath_core.phylactery.max_charge": "Maximum charge",
+  "configuration.afterdeath_core.phylactery.ticks_per_unit": "Ticks per +1 charge",
+  "configuration.afterdeath_core.phylactery.charge_per_use": "Charge cost per rescue",
+  "configuration.afterdeath_core.phylactery.heal_amount": "Health restored on rescue",
+  "configuration.afterdeath_core.phylactery.regen_ticks": "Regeneration II duration (ticks)",
+  "configuration.afterdeath_core.phylactery.absorption_ticks": "Absorption II duration (ticks)",
+  "configuration.afterdeath_core.phylactery.fire_res_ticks": "Fire Resistance duration (ticks)",
+  "configuration.afterdeath_core.phylactery.empty_on_toss": "Empty phylactery when dropped",
+  "configuration.afterdeath_core.phylactery.empty_on_death": "Empty phylactery in death drops",
+
+  "configuration.afterdeath_core.player_mode": "Player mode",
+  "configuration.afterdeath_core.player_mode.anger_ticks": "Anger duration (ticks)",
+  "configuration.afterdeath_core.player_mode.broadcast_radius": "Anger broadcast radius (blocks)",
+
+  "playermode.afterdeath_core.human": "Human",
+  "playermode.afterdeath_core.soul": "Spirit",
+  "playermode.afterdeath_core.skeleton": "Skeleton",
+  "command.afterdeath_core.playermode.changed": "Form changed to: %s",
+  "command.afterdeath_core.playermode.same": "Already in form: %s",
+  "command.afterdeath_core.playermode.unknown": "Unknown form: %s",
+
+  "configuration.afterdeath_core.story_compass": "Story compass",
+  "configuration.afterdeath_core.story_compass.target": "Target structure id",
+  "configuration.afterdeath_core.story_compass.radius_chunks": "Search radius (chunks)",
+  "configuration.afterdeath_core.story_compass.interval_ticks": "Rescan interval (ticks)",
+  "configuration.afterdeath_core.story_compass.refresh_distance": "Refresh distance (blocks)"
+}

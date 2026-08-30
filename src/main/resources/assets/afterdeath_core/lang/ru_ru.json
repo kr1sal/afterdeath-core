@@ -1,0 +1,51 @@
+{
+  "item.afterdeath_core.phylactery": "Филактерия",
+  "item.afterdeath_core.phylactery.tooltip": "Заряд: %s / %s",
+  "item.afterdeath_core.phylactery.desc": "Привязана к душе. Не существует вне рук владельца.",
+  "hud.afterdeath_core.phylactery.charge": "Филактерия: %s%%",
+  "item.afterdeath_core.story_compass": "Сюжетный компас",
+  "item.afterdeath_core.story_compass.target": "Ведёт к: %s",
+  "item.afterdeath_core.story_compass.found": "Цель: %s, %s, %s",
+  "item.afterdeath_core.story_compass.searching": "Ищу цель...",
+
+  "item.afterdeath_core.story_compass_first_boss": "Сюжетный компас: Первый босс",
+  "item.afterdeath_core.story_compass_second_boss": "Сюжетный компас: Второй босс",
+  "item.afterdeath_core.story_compass_third_boss": "Сюжетный компас: Третий босс",
+  "item.afterdeath_core.story_compass_player_base": "Сюжетный компас: База игрока",
+  "item.afterdeath_core.story_compass_final_boss": "Сюжетный компас: Финальный босс",
+
+  "structure.afterdeath_core.first_boss": "Арена первого босса",
+  "structure.afterdeath_core.second_boss": "Арена второго босса",
+  "structure.afterdeath_core.third_boss": "Арена третьего босса",
+  "structure.afterdeath_core.player_base": "База игрока",
+  "structure.afterdeath_core.final_boss": "Арена финального босса",
+  "itemGroup.afterdeath_core": "Afterdeath Core",
+
+  "configuration.afterdeath_core.phylactery": "Филактерия",
+  "configuration.afterdeath_core.phylactery.max_charge": "Максимальный заряд",
+  "configuration.afterdeath_core.phylactery.ticks_per_unit": "Тиков на +1 заряд",
+  "configuration.afterdeath_core.phylactery.charge_per_use": "Стоимость одного спасения",
+  "configuration.afterdeath_core.phylactery.heal_amount": "Здоровье после спасения",
+  "configuration.afterdeath_core.phylactery.regen_ticks": "Длительность Регенерации II (тики)",
+  "configuration.afterdeath_core.phylactery.absorption_ticks": "Длительность Поглощения II (тики)",
+  "configuration.afterdeath_core.phylactery.fire_res_ticks": "Длительность Огнестойкости (тики)",
+  "configuration.afterdeath_core.phylactery.empty_on_toss": "Обнулять заряд при выбрасывании",
+  "configuration.afterdeath_core.phylactery.empty_on_death": "Обнулять заряд при смерти",
+
+  "configuration.afterdeath_core.player_mode": "Режим игрока",
+  "configuration.afterdeath_core.player_mode.anger_ticks": "Длительность агра (тики)",
+  "configuration.afterdeath_core.player_mode.broadcast_radius": "Радиус агра сородичей (блоки)",
+
+  "playermode.afterdeath_core.human": "Человек",
+  "playermode.afterdeath_core.soul": "Дух",
+  "playermode.afterdeath_core.skeleton": "Скелет",
+  "command.afterdeath_core.playermode.changed": "Облик сменён: %s",
+  "command.afterdeath_core.playermode.same": "Ты уже в облике: %s",
+  "command.afterdeath_core.playermode.unknown": "Неизвестный облик: %s",
+
+  "configuration.afterdeath_core.story_compass": "Сюжетный компас",
+  "configuration.afterdeath_core.story_compass.target": "ID целевой структуры",
+  "configuration.afterdeath_core.story_compass.radius_chunks": "Радиус поиска (чанки)",
+  "configuration.afterdeath_core.story_compass.interval_ticks": "Интервал пересканирования (тики)",
+  "configuration.afterdeath_core.story_compass.refresh_distance": "Дистанция обновления цели (блоки)"
+}
