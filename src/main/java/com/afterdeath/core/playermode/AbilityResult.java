@@ -11,14 +11,12 @@ public sealed interface AbilityResult {
     Success SUCCESS = new Success();
     NoAbility NO_ABILITY = new NoAbility();
     WrongMode WRONG_MODE = new WrongMode();
-    NotSprinting NOT_SPRINTING = new NotSprinting();
     SpawnFailed SPAWN_FAILED = new SpawnFailed();
 
     record Success() implements AbilityResult {}
     record NoAbility() implements AbilityResult {}
     record WrongMode() implements AbilityResult {}
     record OnCooldown(int remainingTicks) implements AbilityResult {}
-    record NotSprinting() implements AbilityResult {}
     record SpawnFailed() implements AbilityResult {}
 
     default boolean ok() { return this instanceof Success; }
@@ -33,8 +31,6 @@ public sealed interface AbilityResult {
             case OnCooldown c -> Component.translatable(
                     "ability.afterdeath_core.cooldown",
                     Math.max(1, (c.remainingTicks() + 19) / 20)).withStyle(ChatFormatting.YELLOW);
-            case NotSprinting ignored -> Component.translatable(
-                    "ability.afterdeath_core.not_sprinting").withStyle(ChatFormatting.GRAY);
             case SpawnFailed ignored -> Component.translatable(
                     "ability.afterdeath_core.spawn_failed").withStyle(ChatFormatting.RED);
         };

@@ -54,11 +54,10 @@
   "key.afterdeath_core.summon_vex": "Призвать вредину (Дух)",
   "key.afterdeath_core.summon_skeleton": "Призвать скелета-союзника (Скелет)",
   "key.afterdeath_core.damage_burst": "Всплеск урона (Скелет)",
-  "key.afterdeath_core.dash": "Рывок (Дух/Скелет, нужен спринт)",
+  "key.afterdeath_core.dash": "Рывок (Дух/Скелет)",
 
   "ability.afterdeath_core.no_ability": "Ты ещё не изучил эту способность.",
   "ability.afterdeath_core.wrong_mode": "Эта способность недоступна в текущем облике.",
   "ability.afterdeath_core.cooldown": "Способность на кулдауне: осталось %s сек.",
-  "ability.afterdeath_core.not_sprinting": "Нужно бежать, чтобы использовать эту способность.",
   "ability.afterdeath_core.spawn_failed": "Существо не смогло появиться здесь."
 }

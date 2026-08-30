@@ -81,12 +81,10 @@ public final class AfterdeathAbilities {
 
     /* -------------------- Dash (Soul + Skeleton) -------------------- */
 
-    // Fires from a sprint-jump.
     public static AbilityResult tryDash(ServerPlayer player) {
         if (!player.getTags().contains(TAG_DASH)) return AbilityResult.NO_ABILITY;
         PlayerMode mode = player.getData(PlayerModeAttachments.PLAYER_MODE);
         if (mode == PlayerMode.HUMAN) return AbilityResult.WRONG_MODE; // dash lives in soul/skeleton phases
-        if (!player.isSprinting()) return AbilityResult.NOT_SPRINTING;
         int rem = cooldownRemaining(player, "dash");
         if (rem > 0) return new AbilityResult.OnCooldown(rem);
 

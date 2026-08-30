@@ -54,11 +54,10 @@
   "key.afterdeath_core.summon_vex": "Summon Vex (Spirit)",
   "key.afterdeath_core.summon_skeleton": "Summon Skeleton Ally (Skeleton)",
   "key.afterdeath_core.damage_burst": "Damage Burst (Skeleton)",
-  "key.afterdeath_core.dash": "Dash (Spirit / Skeleton, requires sprint)",
+  "key.afterdeath_core.dash": "Dash (Spirit / Skeleton)",
 
   "ability.afterdeath_core.no_ability": "You have not learned this ability yet.",
   "ability.afterdeath_core.wrong_mode": "This ability is not available in your current form.",
   "ability.afterdeath_core.cooldown": "Ability on cooldown: %s s remaining.",
-  "ability.afterdeath_core.not_sprinting": "You must be sprinting to use this ability.",
   "ability.afterdeath_core.spawn_failed": "The summon could not appear here."
 }
